@@ -10,7 +10,6 @@ package testing;
  *
  */
 import com.jcraft.jsch.*;
-import java.awt.*;
 import javax.swing.*;
 
 public class Shell{

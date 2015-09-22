@@ -2,31 +2,36 @@ package sftpclient;
 
 import javax.swing.*;
 import java.awt.BorderLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import java.awt.Dimension;
 
 @SuppressWarnings("serial")
 public class GUI extends JFrame{
+	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	public GUI() {
+		JPanel settings = new JPanel();
 		
-		JSplitPane splitPane = new JSplitPane();
-		getContentPane().add(splitPane, BorderLayout.CENTER);
+		JTree localDir = new JTree();
+		JTree remoteDir = new JTree();
 		
-		JScrollPane scrollPane = new JScrollPane();
-		splitPane.setLeftComponent(scrollPane);
+		JScrollPane localPane = new JScrollPane(localDir);
+		JScrollPane remotePane = new JScrollPane(remoteDir);
 		
-		JTree tree_1 = new JTree();
-		scrollPane.setViewportView(tree_1);
+		JSplitPane dirViewer = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, localPane, remotePane);
+		dirViewer.setDividerLocation(150);
 		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		splitPane.setRightComponent(scrollPane_1);
+		Dimension minimumSize = new Dimension(150,50);
+		localPane.setMinimumSize(minimumSize);
+		remotePane.setMinimumSize(minimumSize);
 		
-		JTree tree = new JTree();
-		scrollPane_1.setViewportView(tree);
+		tabbedPane.addTab("Directories", null, dirViewer, null);
+		tabbedPane.addTab("Settings", null, settings, null);
+		
+		getContentPane().add(tabbedPane, BorderLayout.CENTER);
 		
 		setVisible(true);
-		this.setSize(200,200);
+		this.setSize(350,200);
 	}
+	
 	public static void main(String args[])	{
 		new GUI();
 	}

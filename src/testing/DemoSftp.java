@@ -1,6 +1,4 @@
 package testing;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.Vector;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
@@ -32,7 +30,8 @@ public class DemoSftp {
  
         ChannelSftp sftp = (ChannelSftp) channel;
         sftp.cd(directory);
-        Vector files = sftp.ls("*");
+        @SuppressWarnings("unchecked")
+		Vector<ChannelSftp.LsEntry> files = sftp.ls("*");
         System.out.printf("Found %d files in dir %s%n", files.size(), directory);
  
 /*        for (ChannelSftp.LsEntry file : files) {

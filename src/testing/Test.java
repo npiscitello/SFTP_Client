@@ -27,7 +27,8 @@ public class Test {
 	        	// open a sftp-specific comms channel
 	        ChannelSftp sftp = (ChannelSftp) channel;
 	        	// store the list of files returned by ls
-	        Vector<ChannelSftp.LsEntry> files = sftp.ls("/home/*");
+	        @SuppressWarnings("unchecked")
+			Vector<ChannelSftp.LsEntry> files = sftp.ls("/home/*");
 	        	// get the first entry in the list of files
 	        ChannelSftp.LsEntry object = files.get(0);
 	        	// print the filename of the returned file

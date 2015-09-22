@@ -16,7 +16,8 @@ import java.awt.*;
 import javax.swing.*;
 
 public class Sftp{
-  public static void main(String[] arg){
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+public static void main(String[] arg){
 
     try{
       JSch jsch=new JSch();
@@ -49,7 +50,7 @@ public class Sftp{
       java.io.InputStream in=System.in;
       java.io.PrintStream out=System.out;
 
-      java.util.Vector cmds=new java.util.Vector();
+      java.util.Vector<String> cmds=new java.util.Vector();
       byte[] buf=new byte[1024];
       int i;
       String str;

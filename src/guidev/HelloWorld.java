@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+@SuppressWarnings("serial")
 public class HelloWorld extends JFrame{
 	public static void main(String args[])	{
 		new HelloWorld();

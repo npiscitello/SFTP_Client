@@ -2,8 +2,6 @@ package guidev;
 
 import javax.swing.*;
 import java.awt.BorderLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
 public class LayoutDev2 extends JFrame{

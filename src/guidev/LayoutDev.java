@@ -28,6 +28,7 @@ public class LayoutDev extends JFrame{
 		JScrollPane scrollBar = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		getContentPane().add(scrollBar, BorderLayout.WEST);
 		
+		@SuppressWarnings("rawtypes")
 		JComboBox comboBox = new JComboBox();
 		getContentPane().add(comboBox, BorderLayout.SOUTH);
 		
