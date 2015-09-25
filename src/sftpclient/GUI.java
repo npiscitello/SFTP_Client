@@ -2,6 +2,7 @@ package sftpclient;
 
 import javax.swing.*;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -11,56 +12,64 @@ import java.awt.Insets;
 @SuppressWarnings("serial")
 public class GUI extends JFrame{
 	
+		// resources
+	private ImageIcon folder = new ImageIcon(getClass().getResource("directory-icon.png"));
+	private ImageIcon gear = new ImageIcon(getClass().getResource("settings-icon.png"));
+	private ImageIcon checkmark = new ImageIcon(getClass().getResource("checkmark-icon.png"));
+	private ImageIcon xmark = new ImageIcon(getClass().getResource("x-icon.png"));
+	private JComponent info = new JLabel("9/2015 Release:      GUI v1.0       Backend v0.0");
+	
+		// dynamic values
+	private JTree localDir = new JTree();
+	private JTree remoteDir = new JTree();
+	private JTextField username = new JTextField(18);
+	private JTextField password = new JTextField(18);
+	private JButton credenter = new JButton(checkmark);
+	private JTextField default_dir = new JTextField(18);
+	private JButton browse = new JButton("Browse...");
+	
 	public GUI(String name, Dimension size, Dimension minsize) {		
 		
-			// directory trees
-		JTree localDir = new JTree();
-		JTree remoteDir = new JTree();
-		
-			// scroll panes
-		JScrollPane localPane = new JScrollPane(localDir);
-		JScrollPane remotePane = new JScrollPane(remoteDir);
-		
-			// split pane; resize the sides dynamically
-		JSplitPane dirViewer = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, localPane, remotePane);
+			// pack scrollable trees into a split pane; resize the sides dynamically
+		JSplitPane dirViewer = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(localDir), new JScrollPane(remoteDir));
 		dirViewer.setResizeWeight(0.5);
 		
-			// username/password labels
-		JLabel userlabel = new JLabel("username:");
-		JLabel passlabel = new JLabel("password:");
-		
-			// username/password entry windows
-		JTextField username = new JTextField(18);
-		JTextField password = new JTextField(18);
-		
-			// username/password enter buttons
-		Insets button_margins = new Insets(0,2,0,2);
-		JButton unenter = new JButton("enter"); unenter.setMargin(button_margins);
-		JButton pwenter = new JButton("enter");	pwenter.setMargin(button_margins);
-		
-			// pack the settings into the settings panel
-		GridBagConstraints constraints = new GridBagConstraints();
-		JPanel settings = new JPanel(new GridBagLayout());
+			// pack the credential settings into a panel
+		JPanel credentials = new JPanel(new GridBagLayout());
+		GridBagConstraints cred_const = new GridBagConstraints();
 		Insets pad = new Insets(0,5,0,5);	Insets zero = new Insets(0,0,0,0);
-		constraints.gridx=0; constraints.gridy=0; constraints.weightx=0; constraints.weighty=0;
-			constraints.insets=pad; constraints.anchor=GridBagConstraints.WEST; settings.add(userlabel, constraints);
-		constraints.gridx=1; constraints.gridy=0; constraints.weightx=1; constraints.weighty=0;
-			constraints.insets=zero; constraints.fill=GridBagConstraints.HORIZONTAL; settings.add(username, constraints);
-		constraints.gridx=2; constraints.gridy=0; constraints.weightx=0; constraints.weighty=0;
-			constraints.insets=pad; constraints.anchor=GridBagConstraints.EAST; settings.add(unenter, constraints);
-		constraints.gridx=0; constraints.gridy=1; constraints.weightx=0; constraints.weighty=0;
-			constraints.insets=pad; constraints.anchor=GridBagConstraints.WEST; settings.add(passlabel, constraints);
-		constraints.gridx=1; constraints.gridy=1; constraints.weightx=1; constraints.weighty=0;
-			constraints.insets=zero; constraints.fill=GridBagConstraints.HORIZONTAL; settings.add(password, constraints);
-		constraints.gridx=2; constraints.gridy=1; constraints.weightx=0; constraints.weighty=0;
-			constraints.insets=pad; constraints.anchor=GridBagConstraints.EAST; settings.add(pwenter, constraints);
-			// dummy panel to take up all the extra space
-		constraints.gridx=0; constraints.gridy=2; constraints.weightx=1; constraints.weighty=1; constraints.insets=zero;
-			constraints.gridwidth=GridBagConstraints.REMAINDER; constraints.fill=GridBagConstraints.BOTH; settings.add(new JPanel(), constraints);
+		cred_const.gridx=0; cred_const.weightx=0; cred_const.insets=pad; cred_const.anchor=GridBagConstraints.WEST;
+			cred_const.gridy=0; credentials.add(new JLabel("username:"), cred_const);
+			cred_const.gridy=1; credentials.add(new JLabel("password:"), cred_const);
+		cred_const.gridx=1; cred_const.weightx=1; cred_const.insets=zero; cred_const.fill=GridBagConstraints.HORIZONTAL;
+			cred_const.gridy=0; credentials.add(username, cred_const);
+			cred_const.gridy=1; credentials.add(password, cred_const);
+		cred_const.gridx=2; cred_const.weightx=0; cred_const.insets=pad; cred_const.anchor=GridBagConstraints.EAST;
+			cred_const.gridy=0; cred_const.gridheight=2; credenter.setMargin(new Insets(0,2,0,2)); credentials.add(credenter, cred_const);
 		
-			// icons
-		ImageIcon folder = new ImageIcon(getClass().getResource("directory-icon.png"));
-		ImageIcon gear = new ImageIcon(getClass().getResource("settings-icon.png"));
+			// pack the default directory selector into a panel
+		JPanel default_dir_sel = new JPanel(new GridBagLayout());
+		GridBagConstraints defdir_const = new GridBagConstraints();
+		defdir_const.gridx=0; defdir_const.anchor=GridBagConstraints.WEST; defdir_const.insets=pad;
+			default_dir_sel.add(new JLabel("default directory:"), defdir_const);
+		defdir_const.gridx=2; defdir_const.anchor=GridBagConstraints.EAST;
+			default_dir_sel.add(browse, defdir_const);
+		defdir_const.weightx=1; defdir_const.gridx=1; defdir_const.fill=GridBagConstraints.HORIZONTAL;
+			defdir_const.insets=zero; default_dir_sel.add(default_dir, defdir_const);
+			
+			// pack all the individual settings into a panel
+		JPanel settings = new JPanel();
+		settings.setLayout(new BoxLayout(settings, BoxLayout.PAGE_AXIS));
+		Dimension vertspace = new Dimension(0,10);
+		settings.add(Box.createRigidArea(vertspace));
+		credentials.setMaximumSize(new Dimension(Integer.MAX_VALUE, credentials.getPreferredSize().height)); 
+			credentials.setAlignmentX(Component.LEFT_ALIGNMENT);settings.add(credentials);
+		settings.add(Box.createRigidArea(vertspace));
+		default_dir_sel.setMaximumSize(new Dimension(Integer.MAX_VALUE, default_dir_sel.getPreferredSize().height));
+			default_dir_sel.setAlignmentX(Component.LEFT_ALIGNMENT);settings.add(default_dir_sel);
+			// add glue to take up extra space
+		settings.add(Box.createVerticalGlue());
+		info.setAlignmentX(Component.LEFT_ALIGNMENT); settings.add(info); settings.add(Box.createRigidArea(vertspace));
 		
 			// pack the split pane and the settings panel into tabs
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -68,14 +77,19 @@ public class GUI extends JFrame{
 		tabbedPane.addTab("Directories", folder, dirViewer, "browse local and remote directories");
 		tabbedPane.addTab("Settings", gear, settings, "configure the application");
 		
-			// status bar
-		JLabel status_bar = new JLabel("status bar placeholder", JLabel.CENTER);
+			// pack components into the status bar
+		JPanel status_bar = new JPanel(new GridBagLayout());
+		GridBagConstraints status_const = new GridBagConstraints();
+		status_const.gridx=0; status_bar.add(new JLabel(checkmark, JLabel.CENTER), status_const);
+		status_const.gridx=1; status_bar.add(new JLabel(xmark, JLabel.CENTER), status_const);
+		status_const.gridx=2; status_const.weightx=1; status_const.insets=pad; status_const.anchor=GridBagConstraints.WEST;
+			status_bar.add(new JLabel("status bar placeholder", JLabel.LEFT), status_const);
 		
 			// pack the tabbed pane and status bar into the window
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
 		getContentPane().add(status_bar, BorderLayout.SOUTH);
 		
-			// window properties
+			// set window properties
 		setTitle(name);
 		setSize(size);
 		setMinimumSize(minsize);
@@ -84,6 +98,6 @@ public class GUI extends JFrame{
 	}
 	
 	public static void main(String args[])	{
-		new GUI("SFTP Client", new Dimension(500,300), new Dimension(300,200));
+		new GUI("SFTP Client", new Dimension(800,500), new Dimension(500,300));
 	}
 }
